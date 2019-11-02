@@ -18,9 +18,6 @@ DeviceAddress tempDeviceAddress; // We'll use this variable to store a found dev
 LiquidCrystal lcd(13, 12, 11, 10, 9, 8);
 
 void setup(void) {
-  // start serial port
-  delay(2000);
-  Serial.begin(9600);
   
   // Start up the library
   sensors.begin();
@@ -35,31 +32,35 @@ void setup(void) {
   numberOfDevices = sensors.getDeviceCount();
   
   // locate devices on the bus
-  Serial.print("Locating devices...");
-  Serial.print("Found ");
-  Serial.print(numberOfDevices, DEC);
-  Serial.println(" devices.");
-
+  lcd.setCursor(1,0);
+  lcd.print("Locating devices...");
+  lcd.print("Found ");
+  lcd.print(numberOfDevices, DEC);
+  lcd.println(" devices.");
+delay(1000);
   // Loop through each device, print out address
   for(int i=0;i<numberOfDevices; i++) {
-    
+    lcd.clear();
+    lcd.setCursor(1,0);
     // Search the wire for address
     delay(50);
     if(sensors.getAddress(tempDeviceAddress, i)) {
-      Serial.print("Found device ");
-      Serial.print(i, DEC);
-      Serial.print(" with address: ");
+      lcd.print("Found device ");
+      lcd.print(i, DEC);
+      lcd.print(" with address: ");
       printAddress(tempDeviceAddress);
-      Serial.println();
+      lcd.println();
     } else {
-      Serial.print("Found ghost device at ");
-      Serial.print(i, DEC);
-      Serial.print(" but could not detect address. Check power and cabling");
+      lcd.print("Found ghost device at ");
+      lcd.print(i, DEC);
+      lcd.print(" but could not detect address. Check power and cabling");
     }
   }
 }
 
 void loop(void) { 
+  lcd.clear();
+  lcd.setCursor(1,0);
   sensors.requestTemperatures(); // Send the command to get temperatures
   
   // Loop through each device, print out temperature data
@@ -68,15 +69,15 @@ void loop(void) {
     if(sensors.getAddress(tempDeviceAddress, i)){
     
     // Output the device ID
-    Serial.print("Temperature for device: ");
-    Serial.println(i,DEC);
+    lcd.print("Temperature for device: ");
+    lcd.println(i,DEC);
 
     // Print the data
     float tempC = sensors.getTempC(tempDeviceAddress);
-    Serial.print("Temp C: ");
-    Serial.print(tempC);
-    Serial.print(" Temp F: ");
-    Serial.println(DallasTemperature::toFahrenheit(tempC)); // Converts tempC to Fahrenheit
+    lcd.print("Temp C: ");
+    lcd.print(tempC);
+    lcd.print(" Temp F: ");
+    lcd.println(DallasTemperature::toFahrenheit(tempC)); // Converts tempC to Fahrenheit
     }   
   }
   delay(5000);
@@ -85,7 +86,7 @@ void loop(void) {
 // function to print a device address
 void printAddress(DeviceAddress deviceAddress) {
   for (uint8_t i = 0; i < 8; i++) {
-    if (deviceAddress[i] < 16) Serial.print("0");
-      Serial.print(deviceAddress[i], HEX);
+    if (deviceAddress[i] < 16) lcd.print("0");
+      lcd.print(deviceAddress[i], HEX);
   }
 }
