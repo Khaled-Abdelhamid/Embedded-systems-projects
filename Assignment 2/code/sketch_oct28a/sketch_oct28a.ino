@@ -30,7 +30,7 @@ void loop()
   digitalWrite(trigPin, LOW);
   duration=pulseIn(echoPin,HIGH);// Reads the echoPin, returnsthe sound wave travel time in microseconds
   distance= duration*0.034/2;
-  distance=distance*2.0/1101.0;// to map the values of the sensor to the test range (for d)
+  distance=distance*2.0/1050.0;// to map the values of the sensor to the test range (for d)
   test=analogRead(A0);
   
   Serial.print("Distance Measured="); // Prints the distance on the Serial Monitor
