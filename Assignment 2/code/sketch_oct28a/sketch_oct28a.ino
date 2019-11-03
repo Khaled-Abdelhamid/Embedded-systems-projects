@@ -1,3 +1,5 @@
+#include <MedianFilter.h>
+
 const int trigPin = 5; // PWM trigger
 const int echoPin=3;// PWM Output 0-25000US,Every 50US represent 1cm
 long duration; // defines variables
@@ -8,11 +10,12 @@ int pred=11;
 int pgreen=10;
 int pblue=9;
 int pyellow=8;
+MedianFilter filter(3, 0); //define median filter object
 
 void setup()
 {
-  pinMode(trigPin, OUTPUT); //Sets the trigPin as an Output
-  
+ 
+  pinMode(trigPin, OUTPUT); //Sets the trigPin as an Output 
   pinMode(pred, OUTPUT); 
   pinMode(pgreen, OUTPUT);
   pinMode(pblue, OUTPUT); 
@@ -28,8 +31,12 @@ void loop()
   digitalWrite(trigPin, HIGH);
   delayMicroseconds(10);
   digitalWrite(trigPin, LOW);
+  
+  //median filter logic
   duration=pulseIn(echoPin,HIGH);// Reads the echoPin, returnsthe sound wave travel time in microseconds
   distance= duration*0.034/2;
+  filter.in(distance);
+  distance = filter.out();
   distance=distance*2.0/1050.0;// to map the values of the sensor to the test range (for d)
   test=analogRead(A0);
   
